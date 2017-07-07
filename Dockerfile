@@ -27,6 +27,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         curl \
         less \
         vim \
+    && echo ". /etc/bash_completion" >> ~/.bashrc \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp/install-utils
@@ -36,7 +37,6 @@ WORKDIR /tmp/install-utils
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl \
     && chmod +x ./kubectl \
     && mv ./kubectl /usr/local/bin/kubectl \
-    && echo ". /etc/bash_completion" >> ~/.bashrc \
     && echo "source <(kubectl completion bash)" >> ~/.bashrc
 
 # Install kubectx/kubens
@@ -59,6 +59,7 @@ RUN curl -L https://github.com/istio/istio/releases/download/$ISTIO_VERSION/isti
     && chmod +x /usr/local/bin/istioctl \
     && cd ../ \
     && rm -fr ./istio-$ISTIO_VERSION
+    && echo "source <(istioctl completion)" >> ~/.bashrc
 
 # Install helm
 # License: Apache-2.0
