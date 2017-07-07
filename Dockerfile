@@ -24,7 +24,9 @@ LABEL maintainer="Paul Bouwer" \
 RUN apt-get update && apt-get install -y --no-install-recommends \
         bash-completion \
         ca-certificates \
-        curl \        
+        curl \
+        less \
+        vim \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp/install-utils
