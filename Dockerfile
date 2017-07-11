@@ -58,7 +58,7 @@ RUN curl -L https://github.com/istio/istio/releases/download/$ISTIO_VERSION/isti
     && mv bin/istioctl /usr/local/bin/ \
     && chmod +x /usr/local/bin/istioctl \
     && cd ../ \
-    && rm -fr ./istio-$ISTIO_VERSION
+    && rm -fr ./istio-$ISTIO_VERSION \
     && echo "source <(istioctl completion)" >> ~/.bashrc
 
 # Install helm
@@ -69,7 +69,8 @@ RUN mkdir helm-$HELM_VERSION \
     && mv helm /usr/local/bin/ \
     && chmod +x /usr/local/bin/helm \
     && cd ../ \
-    && rm -fr ./helm-$HELM_VERSION
+    && rm -fr ./helm-$HELM_VERSION \
+    && echo "source <(helm completion bash)" >> ~/.bashrc
 
 WORKDIR /root
 CMD bash
