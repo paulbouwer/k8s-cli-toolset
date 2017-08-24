@@ -2,10 +2,10 @@
 
 Provides the following [Kubernetes](https://kubernetes.io/) cli toolset:
 
-- kubectl **1.7.0** (with command completion)
+- kubectl **1.7.4** (with command completion)
 - kubectx/kubens **0.3.1** (with command completion)
-- istioctl **0.1.6**
-- helm **2.5.0**
+- istioctl **0.1.6** (with command completion)
+- helm **2.6.0** (with command completion)
 
 ## Toolset
 
