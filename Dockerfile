@@ -1,6 +1,7 @@
 FROM ubuntu:17.10
 
 ARG BUILD_DATE
+ARG IMAGE_VERSION
 ARG VCS_REF
 ARG KUBECTL_VERSION=1.7.4
 ARG KUBECTX_VERSION=0.3.1
@@ -12,13 +13,13 @@ LABEL maintainer="Paul Bouwer" \
       org.label-schema.schema-version="1.0" \
       org.label-schema.vendor="Paul Bouwer" \
       org.label-schema.name="Kubernetes CLI Toolset" \
-      org.label-schema.version=0.1 \
+      org.label-schema.version=$IMAGE_VERSION \
       org.label-schema.license="MIT" \
       org.label-schema.description="Provides the following Kubernetes cli toolset - kubectl $KUBECTL_VERSION (with command completion), kubectx/kubens $KUBECTX_VERSION, istioctl $ISTIO_VERSION, and helm $HELM_VERSION." \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-url="https://github.com/paulbouwer/k8s-cli-toolset.git" \
       org.label-schema.vcs-ref=$VCS_REF \ 
-      org.label-schema.docker.cmd="docker run -it --rm -v \${HOME}/.kube:/root/.kube -v \${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.1"
+      org.label-schema.docker.cmd="docker run -it --rm -v \${HOME}/.kube:/root/.kube -v \${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:$IMAGE_VERSION"
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -71,6 +72,8 @@ RUN mkdir helm-$HELM_VERSION \
     && cd ../ \
     && rm -fr ./helm-$HELM_VERSION \
     && echo "source <(helm completion bash)" >> ~/.bashrc
+
+RUN rm -fr /tmp/install-utils
 
 WORKDIR /root
 CMD bash
