@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         less \
         vim \
     && echo ". /etc/bash_completion" >> ~/.bashrc \
+    && echo 'PS1="k8s-cli-toolkit# "' >> ~/.bashrc \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp/install-utils
