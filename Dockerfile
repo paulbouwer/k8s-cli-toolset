@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         bash-completion \
         ca-certificates \
         curl \
+        jq \
         less \
         vim \
     && echo ". /etc/bash_completion" >> ~/.bashrc \
