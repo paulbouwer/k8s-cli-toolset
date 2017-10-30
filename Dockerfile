@@ -3,10 +3,10 @@ FROM ubuntu:17.10
 ARG BUILD_DATE
 ARG IMAGE_VERSION
 ARG VCS_REF
-ARG KUBECTL_VERSION=1.7.4
+ARG KUBECTL_VERSION=1.8.2
 ARG KUBECTX_VERSION=0.3.1
-ARG ISTIO_VERSION=0.1.6
-ARG HELM_VERSION=2.6.0
+ARG ISTIO_VERSION=0.2.10
+ARG HELM_VERSION=2.7.0
 
 # Metadata as defined at http://label-schema.org
 LABEL maintainer="Paul Bouwer" \
@@ -30,7 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         less \
         vim \
     && echo ". /etc/bash_completion" >> ~/.bashrc \
-    && echo 'PS1="k8s-cli-toolkit# "' >> ~/.bashrc \
+    && echo 'PS1="k8s-cli# "' >> ~/.bashrc \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp/install-utils

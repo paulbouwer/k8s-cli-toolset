@@ -2,10 +2,10 @@
 
 Provides the following [Kubernetes](https://kubernetes.io/) cli toolset:
 
-- kubectl **1.7.4** (with command completion)
+- kubectl **1.8.2** (with command completion)
 - kubectx/kubens **0.3.1** (with command completion)
-- istioctl **0.1.6** (with command completion)
-- helm **2.6.0** (with command completion)
+- istioctl **0.2.10** (with command completion)
+- helm **2.7.0** (with command completion)
 
 And the following utilities/tools:
 
@@ -66,12 +66,12 @@ Run the image as follows. Ensure that you mount your ~/.kube and ~/.helm folders
 
 Windows
 ```
-PS> docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.3
+PS> docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.4
 ```
 
 Linux/MacOS
 ```
-$ docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.3
+$ docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.4
 ```
 
 ### Build
@@ -80,10 +80,10 @@ If you'd like to build the image yourself, then you can do so as follows. The `b
 
 Powershell
 ```
-PS> docker build --no-cache --build-arg IMAGE_VERSION="0.3" --build-arg BUILD_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg VCS_REF="$(git rev-parse HEAD)" -f Dockerfile -t "k8s-cli-toolset" .
+PS> docker build --no-cache --build-arg IMAGE_VERSION="0.4" --build-arg BUILD_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg VCS_REF="$(git rev-parse HEAD)" -f Dockerfile -t "k8s-cli-toolset" .
 ```
 
 Bash
 ```
-$ docker build --no-cache --build-arg IMAGE_VERSION="0.3" --build-arg BUILD_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg VCS_REF="`git rev-parse HEAD`" -f Dockerfile -t "k8s-cli-toolset" .
+$ docker build --no-cache --build-arg IMAGE_VERSION="0.4" --build-arg BUILD_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg VCS_REF="`git rev-parse HEAD`" -f Dockerfile -t "k8s-cli-toolset" .
 ```
