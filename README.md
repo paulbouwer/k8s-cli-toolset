@@ -2,10 +2,11 @@
 
 Provides the following [Kubernetes](https://kubernetes.io/) cli toolset:
 
-- kubectl **1.8.2** (with command completion)
-- kubectx/kubens **0.3.1** (with command completion)
-- istioctl **0.2.10** (with command completion)
-- helm **2.7.0** (with command completion)
+- kubectl **1.9.1** (with command completion)
+- kubectx/kubens **0.4.0** (with command completion)
+- istioctl **0.4.0** (with command completion)
+- helm **2.7.2** (with command completion)
+- ark **0.6.0**
 
 And the following utilities/tools:
 
@@ -20,9 +21,9 @@ And the following utilities/tools:
 
 [Kubernetes](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/) is an open-source platform for automating deployment, scaling, and operations of application containers across clusters of hosts, providing container-centric infrastructure. Kubernetes is:
 
-- **Portable**: public, private, hybrid, multi-cloud
-- **Extensible**: modular, pluggable, hookable, composable
-- **Self-healing**: auto-placement, auto-restart, auto-replication, auto-scaling
+- **Portable** - public, private, hybrid, multi-cloud
+- **Extensible** - modular, pluggable, hookable, composable
+- **Self-healing** - auto-placement, auto-restart, auto-replication, auto-scaling
 
 > [kubectl](https://kubernetes.io/docs/user-guide/kubectl-overview/) is a command line utility for running [commands](https://kubernetes.io/docs/user-guide/kubectl/v1.7/) against Kubernetes clusters. kubectl is configured with [command completion](https://kubernetes.io/docs/tasks/tools/install-kubectl/#on-linux-using-bash).
 
@@ -54,11 +55,21 @@ Kubernetes supports multiple virtual clusters backed by the same physical cluste
 
 > [helm](https://github.com/kubernetes/helm) is a tool for managing Helm Charts. Helm Charts are packages of pre-configured Kubernetes resources. Only the helm client is installed. You will need to install the tiller component into your Kubernetes cluster using `helm init`.
 
+### ark
+
+[Ark](https://github.com/heptio/ark) is a utility for managing disaster recovery, specifically for your Kubernetes cluster resources and persistent volumes. It provides a simple, configurable, and operationally robust way to back up and restore your applications and persistent volumes from a series of checkpoints. It caters for the following:
+
+- **Disaster recovery** - reduce time to recover in the case of infrastructure loss, data corruption, and/or services outages.
+- **Cluster portability** - easily migrate Kubernetes resources from one cluster to another.
+- **Dev and test environment setup** - easily replicate your production environment to create development and testing environments.
+
+> [ark](https://github.com/heptio/ark/tree/master/docs/cli-reference) is a command line utility to initiate ad-hoc backups, scheduled backups, or restores in an [Ark](https://github.com/heptio/ark) managed system..
+
 ## Docker images
 
 The Docker image is built on top of the `Ubuntu 17.10` base image to provide a full weight environment. It is available on DockerHub as:
 
-- [paulbouwer/k8s-cli-toolset:0.3](https://hub.docker.com/r/paulbouwer/k8s-cli-toolset/)
+- [paulbouwer/k8s-cli-toolset:0.5](https://hub.docker.com/r/paulbouwer/k8s-cli-toolset/)
 
 ### Run
 
@@ -66,12 +77,12 @@ Run the image as follows. Ensure that you mount your ~/.kube and ~/.helm folders
 
 Windows
 ```
-PS> docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.4
+PS> docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.5
 ```
 
 Linux/MacOS
 ```
-$ docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.4
+$ docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.5
 ```
 
 ### Build
@@ -80,10 +91,10 @@ If you'd like to build the image yourself, then you can do so as follows. The `b
 
 Powershell
 ```
-PS> docker build --no-cache --build-arg IMAGE_VERSION="0.4" --build-arg BUILD_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg VCS_REF="$(git rev-parse HEAD)" -f Dockerfile -t "k8s-cli-toolset" .
+PS> docker build --no-cache --build-arg IMAGE_VERSION="0.5" --build-arg BUILD_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg VCS_REF="$(git rev-parse HEAD)" -f Dockerfile -t "k8s-cli-toolset:0.5" .
 ```
 
 Bash
 ```
-$ docker build --no-cache --build-arg IMAGE_VERSION="0.4" --build-arg BUILD_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg VCS_REF="`git rev-parse HEAD`" -f Dockerfile -t "k8s-cli-toolset" .
+$ docker build --no-cache --build-arg IMAGE_VERSION="0.5" --build-arg BUILD_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg VCS_REF="`git rev-parse HEAD`" -f Dockerfile -t "k8s-cli-toolset:0.5" .
 ```

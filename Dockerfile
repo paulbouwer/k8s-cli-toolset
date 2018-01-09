@@ -3,10 +3,11 @@ FROM ubuntu:17.10
 ARG BUILD_DATE
 ARG IMAGE_VERSION
 ARG VCS_REF
-ARG KUBECTL_VERSION=1.8.2
-ARG KUBECTX_VERSION=0.3.1
-ARG ISTIO_VERSION=0.2.10
-ARG HELM_VERSION=2.7.0
+ARG KUBECTL_VERSION=1.9.1
+ARG KUBECTX_VERSION=0.4.0
+ARG ISTIO_VERSION=0.4.0
+ARG HELM_VERSION=2.7.2
+ARG ARK_VERSION=0.6.0
 
 # Metadata as defined at http://label-schema.org
 LABEL maintainer="Paul Bouwer" \
@@ -15,10 +16,10 @@ LABEL maintainer="Paul Bouwer" \
       org.label-schema.name="Kubernetes CLI Toolset" \
       org.label-schema.version=$IMAGE_VERSION \
       org.label-schema.license="MIT" \
-      org.label-schema.description="Provides the following Kubernetes cli toolset - kubectl $KUBECTL_VERSION, kubectx/kubens $KUBECTX_VERSION, istioctl $ISTIO_VERSION, and helm $HELM_VERSION." \
+      org.label-schema.description="Provides the following Kubernetes cli toolset - kubectl $KUBECTL_VERSION, kubectx/kubens $KUBECTX_VERSION, istioctl $ISTIO_VERSION, helm $HELM_VERSION, and ark $ARK_VERSION." \
       org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-url="https://github.com/paulbouwer/k8s-cli-toolset.git" \
-      org.label-schema.vcs-ref=$VCS_REF \ 
+      org.label-schema.vcs-ref=$VCS_REF \
       org.label-schema.docker.cmd="docker run -it --rm -v \${HOME}/.kube:/root/.kube -v \${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:$IMAGE_VERSION"
 
 # Install dependencies
@@ -74,6 +75,13 @@ RUN mkdir helm-$HELM_VERSION \
     && cd ../ \
     && rm -fr ./helm-$HELM_VERSION \
     && echo "source <(helm completion bash)" >> ~/.bashrc
+
+# Install ark
+# License: Apache-2.0
+RUN mkdir ark-$ARK_VERSION \
+    && curl -L https://github.com/heptio/ark/releases/download/v$ARK_VERSION/ark-v$ARK_VERSION-linux-amd64.tar.gz | tar xz \
+    && mv ark /usr/local/bin/ \
+    && chmod +x /usr/local/bin/ark
 
 RUN rm -fr /tmp/install-utils
 
