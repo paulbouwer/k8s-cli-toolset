@@ -9,18 +9,18 @@ ARG ISTIO_VERSION=0.4.0
 ARG HELM_VERSION=2.7.2
 ARG ARK_VERSION=0.6.0
 
-# Metadata as defined at http://label-schema.org
-LABEL maintainer="Paul Bouwer" \
-      org.label-schema.schema-version="1.0" \
-      org.label-schema.vendor="Paul Bouwer" \
-      org.label-schema.name="Kubernetes CLI Toolset" \
-      org.label-schema.version=$IMAGE_VERSION \
-      org.label-schema.license="MIT" \
-      org.label-schema.description="Provides the following Kubernetes cli toolset - kubectl $KUBECTL_VERSION, kubectx/kubens $KUBECTX_VERSION, istioctl $ISTIO_VERSION, helm $HELM_VERSION, and ark $ARK_VERSION." \
-      org.label-schema.build-date=$BUILD_DATE \
-      org.label-schema.vcs-url="https://github.com/paulbouwer/k8s-cli-toolset.git" \
-      org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.docker.cmd="docker run -it --rm -v \${HOME}/.kube:/root/.kube -v \${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:$IMAGE_VERSION"
+# Metadata as defined in OCI image spec annotations - https://github.com/opencontainers/image-spec/blob/master/annotations.md
+LABEL org.opencontainers.image.title="Kubernetes cli toolset" \
+      org.opencontainers.image.description="Provides the following Kubernetes cli toolset - kubectl $KUBECTL_VERSION, kubectx/kubens $KUBECTX_VERSION, istioctl $ISTIO_VERSION, helm $HELM_VERSION, and ark $ARK_VERSION." \
+      org.opencontainers.image.created=$BUILD_DATE \
+      org.opencontainers.image.version=$IMAGE_VERSION \
+      org.opencontainers.image.authors="Paul Bouwer" \
+      org.opencontainers.image.url="https://hub.docker.com/r/paulbouwer/k8s-cli-toolset/" \
+      org.opencontainers.image.documentation="https://github.com/paulbouwer/k8s-cli-toolset" \
+      org.opencontainers.image.vendor="Paul Bouwer" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.source="https://github.com/paulbouwer/k8s-cli-toolset.git" \
+      org.opencontainers.image.revision=$VCS_REF 
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
