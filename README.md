@@ -7,6 +7,7 @@ Provides the following [Kubernetes](https://kubernetes.io/) cli toolset:
 - istioctl **0.4.0** (with command completion)
 - helm **2.7.2** (with command completion)
 - ark **0.6.0**
+- kube-ps1 **0.2.0**
 
 And the following utilities/tools:
 
@@ -65,6 +66,10 @@ Kubernetes supports multiple virtual clusters backed by the same physical cluste
 
 > [ark](https://github.com/heptio/ark/tree/master/docs/cli-reference) is a command line utility to initiate ad-hoc backups, scheduled backups, or restores in an [Ark](https://github.com/heptio/ark) managed system..
 
+### kube-ps1
+
+[kube-ps1](https://github.com/jonmosco/kube-ps1) is a script that lets you add the current Kubernetes context and namespace configured on kubectl to your bash/zsh prompt strings (i.e. the `$PS1`). It has been leveraged in this image to provide a customised prompt that provides information about the Kubernetes cluster that `kubectl` is currently targeting.
+
 ## Docker images
 
 The Docker image is built on top of the `Ubuntu 17.10` base image to provide a full weight environment. It is available on DockerHub as:
@@ -91,10 +96,10 @@ If you'd like to build the image yourself, then you can do so as follows. The `b
 
 Powershell
 ```
-PS> docker build --no-cache --build-arg IMAGE_VERSION="0.5" --build-arg BUILD_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg VCS_REF="$(git rev-parse HEAD)" -f Dockerfile -t "k8s-cli-toolset:0.5" .
+PS> docker build --no-cache --build-arg IMAGE_VERSION="0.5" --build-arg IMAGE_CREATE_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg IMAGE_SOURCE_REVISION="$(git rev-parse HEAD)" -f Dockerfile -t "k8s-cli-toolset:0.5" .
 ```
 
 Bash
 ```
-$ docker build --no-cache --build-arg IMAGE_VERSION="0.5" --build-arg BUILD_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg VCS_REF="`git rev-parse HEAD`" -f Dockerfile -t "k8s-cli-toolset:0.5" .
+$ docker build --no-cache --build-arg IMAGE_VERSION="0.5" --build-arg IMAGE_CREATE_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg IMAGE_SOURCE_REVISION="`git rev-parse HEAD`" -f Dockerfile -t "k8s-cli-toolset:0.5" .
 ```

@@ -1,18 +1,19 @@
 FROM ubuntu:17.10
 
-ARG BUILD_DATE
+ARG IMAGE_CREATE_DATE
 ARG IMAGE_VERSION
-ARG VCS_REF
+ARG IMAGE_SOURCE_REVISION
 ARG KUBECTL_VERSION=1.9.1
 ARG KUBECTX_VERSION=0.4.0
 ARG ISTIO_VERSION=0.4.0
 ARG HELM_VERSION=2.7.2
 ARG ARK_VERSION=0.6.0
+ARG KUBE_PS1_VERSION=0.2.0 
 
 # Metadata as defined in OCI image spec annotations - https://github.com/opencontainers/image-spec/blob/master/annotations.md
 LABEL org.opencontainers.image.title="Kubernetes cli toolset" \
-      org.opencontainers.image.description="Provides the following Kubernetes cli toolset - kubectl $KUBECTL_VERSION, kubectx/kubens $KUBECTX_VERSION, istioctl $ISTIO_VERSION, helm $HELM_VERSION, and ark $ARK_VERSION." \
-      org.opencontainers.image.created=$BUILD_DATE \
+      org.opencontainers.image.description="Provides the following Kubernetes cli toolset - kubectl $KUBECTL_VERSION, kubectx/kubens $KUBECTX_VERSION, istioctl $ISTIO_VERSION, helm $HELM_VERSION, and ark $ARK_VERSION. Leverages kube-ps1 $KUBE_PS1_VERSION to provide the current Kubernetes context and namespace on the bash prompt." \
+      org.opencontainers.image.created=$IMAGE_CREATE_DATE \
       org.opencontainers.image.version=$IMAGE_VERSION \
       org.opencontainers.image.authors="Paul Bouwer" \
       org.opencontainers.image.url="https://hub.docker.com/r/paulbouwer/k8s-cli-toolset/" \
@@ -20,9 +21,9 @@ LABEL org.opencontainers.image.title="Kubernetes cli toolset" \
       org.opencontainers.image.vendor="Paul Bouwer" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.source="https://github.com/paulbouwer/k8s-cli-toolset.git" \
-      org.opencontainers.image.revision=$VCS_REF 
+      org.opencontainers.image.revision=$IMAGE_SOURCE_REVISION 
 
-# Install dependencies
+# Install dependencies and create dirs
 RUN apt-get update && apt-get install -y --no-install-recommends \
         bash-completion \
         ca-certificates \
@@ -31,8 +32,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         less \
         vim \
     && echo ". /etc/bash_completion" >> ~/.bashrc \
-    && echo 'PS1="k8s-cli# "' >> ~/.bashrc \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p ~/k8s-prompt
 
 WORKDIR /tmp/install-utils
 
@@ -82,6 +83,18 @@ RUN mkdir ark-$ARK_VERSION \
     && curl -L https://github.com/heptio/ark/releases/download/v$ARK_VERSION/ark-v$ARK_VERSION-linux-amd64.tar.gz | tar xz \
     && mv ark /usr/local/bin/ \
     && chmod +x /usr/local/bin/ark
+
+# Install kube-ps1
+# License: Apache-2.0
+COPY k8s-cli-ps1.sh /root/k8s-prompt/
+RUN curl -L https://github.com/jonmosco/kube-ps1/archive/$KUBE_PS1_VERSION.tar.gz | tar xz \
+    && cd ./kube-ps1-$KUBE_PS1_VERSION \
+    && mv kube-ps1.sh ~/k8s-prompt/ \
+    && chmod +x ~/k8s-prompt/*.sh \
+    && rm -fr ./kube-ps1-$KUBE_PS1_VERSION \
+    && echo "source ~/k8s-prompt/kube-ps1.sh" >> ~/.bashrc \
+    && echo "source ~/k8s-prompt/k8s-cli-ps1.sh" >> ~/.bashrc \
+    && echo "PROMPT_COMMAND=\"_kube_ps1_load && k8s_cli_ps1\"" >> ~/.bashrc 
 
 RUN rm -fr /tmp/install-utils
 
