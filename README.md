@@ -7,7 +7,6 @@ Provides the following [Kubernetes](https://kubernetes.io/) cli toolset:
 - istioctl **0.4.0** (with command completion)
 - helm **2.7.2** (with command completion)
 - ark **0.6.0**
-- kube-ps1 **0.2.0**
 
 And the following utilities/tools:
 
@@ -15,6 +14,10 @@ And the following utilities/tools:
 - jq
 - less
 - vim
+
+Leverages kube-ps1 **0.2.0** to provide the current Kubernetes context and namespace on the bash prompt.
+
+![Alt text](k8s-cli-toolset.gif)
 
 ## Toolset
 
@@ -70,7 +73,7 @@ Kubernetes supports multiple virtual clusters backed by the same physical cluste
 
 [kube-ps1](https://github.com/jonmosco/kube-ps1) is a script that lets you add the current Kubernetes context and namespace configured on kubectl to your bash/zsh prompt strings (i.e. the `$PS1`). It has been leveraged in this image to provide a customised prompt that provides information about the Kubernetes cluster that `kubectl` is currently targeting.
 
-## Docker images
+## Docker image
 
 The Docker image is built on top of the `Ubuntu 17.10` base image to provide a full weight environment. It is available on DockerHub as:
 
@@ -92,7 +95,7 @@ $ docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm 
 
 ### Build
 
-If you'd like to build the image yourself, then you can do so as follows. The `build-arg` parameters provide values to the Docker image labels which follow the [Label Schema](http://label-schema.org/rc1/) convention.
+If you'd like to build the image yourself, then you can do so as follows. The `build-arg` parameters provide values to the Docker image labels which follow the [OCI Image Spec Annotations](https://github.com/opencontainers/image-spec/blob/master/annotations.md) convention.
 
 Powershell
 ```
