@@ -3,12 +3,12 @@ FROM ubuntu:17.10
 ARG IMAGE_CREATE_DATE
 ARG IMAGE_VERSION
 ARG IMAGE_SOURCE_REVISION
-ARG KUBECTL_VERSION=1.9.1
+ARG KUBECTL_VERSION=1.9.3
 ARG KUBECTX_VERSION=0.4.0
-ARG ISTIO_VERSION=0.4.0
-ARG HELM_VERSION=2.7.2
-ARG ARK_VERSION=0.6.0
-ARG KUBE_PS1_VERSION=0.2.0 
+ARG ISTIO_VERSION=0.6.0
+ARG HELM_VERSION=2.8.1
+ARG ARK_VERSION=0.7.1
+ARG KUBE_PS1_VERSION=0.6.0 
 
 # Metadata as defined in OCI image spec annotations - https://github.com/opencontainers/image-spec/blob/master/annotations.md
 LABEL org.opencontainers.image.title="Kubernetes cli toolset" \
@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         vim \
     && echo ". /etc/bash_completion" >> ~/.bashrc \
     && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p ~/completions \
     && mkdir -p ~/k8s-prompt
 
 WORKDIR /tmp/install-utils
@@ -42,7 +43,8 @@ WORKDIR /tmp/install-utils
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl \
     && chmod +x ./kubectl \
     && mv ./kubectl /usr/local/bin/kubectl \
-    && echo "source <(kubectl completion bash)" >> ~/.bashrc
+    && kubectl completion bash > ~/completions/kubectl.completion \ 
+    && echo "source ~/completions/kubectl.completion" >> ~/.bashrc
 
 # Install kubectx/kubens
 # License: Apache-2.0
@@ -51,8 +53,10 @@ RUN curl -L https://github.com/ahmetb/kubectx/archive/v$KUBECTX_VERSION.tar.gz |
     && mv kubectx kubens utils.bash /usr/local/bin/ \
     && chmod +x /usr/local/bin/kubectx \
     && chmod +x /usr/local/bin/kubens \
-    && cat completion/kubectx.bash >> ~/.bashrc \
-    && cat completion/kubens.bash >> ~/.bashrc \
+    && cat completion/kubectx.bash >> ~/completions/kubectx.completion \
+    && cat completion/kubens.bash >> ~/completions/kubens.completion \
+    && echo "source ~/completions/kubectx.completion" >> ~/.bashrc \
+    && echo "source ~/completions/kubens.completion" >> ~/.bashrc \
     && cd ../ \
     && rm -fr ./kubectx-$KUBECTX_VERSION
 
@@ -64,8 +68,10 @@ RUN curl -L https://github.com/istio/istio/releases/download/$ISTIO_VERSION/isti
     && chmod +x /usr/local/bin/istioctl \
     && cd ../ \
     && rm -fr ./istio-$ISTIO_VERSION \
-    && echo "source <(istioctl completion)" >> ~/.bashrc
-
+    && istioctl collateral --bash -o ~/completions \
+    && mv ~/completions/istioctl.bash ~/completions/istioctl.completion \
+    && echo "source ~/completions/istioctl.completion" >> ~/.bashrc
+ 
 # Install helm
 # License: Apache-2.0
 RUN mkdir helm-$HELM_VERSION \
@@ -75,7 +81,8 @@ RUN mkdir helm-$HELM_VERSION \
     && chmod +x /usr/local/bin/helm \
     && cd ../ \
     && rm -fr ./helm-$HELM_VERSION \
-    && echo "source <(helm completion bash)" >> ~/.bashrc
+    && helm completion bash > ~/completions/helm.completion \
+    && echo "source ~/completions/helm.completion" >> ~/.bashrc
 
 # Install ark
 # License: Apache-2.0
@@ -94,7 +101,7 @@ RUN curl -L https://github.com/jonmosco/kube-ps1/archive/$KUBE_PS1_VERSION.tar.g
     && rm -fr ./kube-ps1-$KUBE_PS1_VERSION \
     && echo "source ~/k8s-prompt/kube-ps1.sh" >> ~/.bashrc \
     && echo "source ~/k8s-prompt/k8s-cli-ps1.sh" >> ~/.bashrc \
-    && echo "PROMPT_COMMAND=\"_kube_ps1_load && k8s_cli_ps1\"" >> ~/.bashrc 
+    && echo "PROMPT_COMMAND=\"_kube_ps1_update_cache && k8s_cli_ps1\"" >> ~/.bashrc 
 
 RUN rm -fr /tmp/install-utils
 
