@@ -1,13 +1,13 @@
-FROM ubuntu:17.10
+FROM ubuntu:18.10
 
 ARG IMAGE_CREATE_DATE
 ARG IMAGE_VERSION
 ARG IMAGE_SOURCE_REVISION
-ARG KUBECTL_VERSION=1.9.3
-ARG KUBECTX_VERSION=0.4.0
-ARG ISTIO_VERSION=0.6.0
-ARG HELM_VERSION=2.8.1
-ARG ARK_VERSION=0.7.1
+ARG KUBECTL_VERSION=1.10.5
+ARG KUBECTX_VERSION=0.5.0
+ARG ISTIO_VERSION=0.8.0
+ARG HELM_VERSION=2.9.1
+ARG ARK_VERSION=0.8.2
 ARG KUBE_PS1_VERSION=0.6.0 
 
 # Metadata as defined in OCI image spec annotations - https://github.com/opencontainers/image-spec/blob/master/annotations.md
@@ -50,7 +50,7 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL
 # License: Apache-2.0
 RUN curl -L https://github.com/ahmetb/kubectx/archive/v$KUBECTX_VERSION.tar.gz | tar xz \
     && cd ./kubectx-$KUBECTX_VERSION \
-    && mv kubectx kubens utils.bash /usr/local/bin/ \
+    && mv kubectx kubens /usr/local/bin/ \
     && chmod +x /usr/local/bin/kubectx \
     && chmod +x /usr/local/bin/kubens \
     && cat completion/kubectx.bash >> ~/completions/kubectx.completion \

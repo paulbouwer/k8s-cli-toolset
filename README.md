@@ -2,11 +2,11 @@
 
 Provides the following [Kubernetes](https://kubernetes.io/) cli toolset:
 
-- kubectl **1.9.3** (with command completion)
-- kubectx/kubens **0.4.0** (with command completion)
-- istioctl **0.6.0** (with command completion)
-- helm **2.8.1** (with command completion)
-- ark **0.7.1**
+- kubectl **1.10.5** (with command completion)
+- kubectx/kubens **0.5.0** (with command completion)
+- istioctl **0.8.0** (with command completion)
+- helm **2.9.1** (with command completion)
+- ark **0.8.2**
 
 And the following utilities/tools:
 
@@ -75,9 +75,9 @@ Kubernetes supports multiple virtual clusters backed by the same physical cluste
 
 ## Docker image
 
-The Docker image is built on top of the `Ubuntu 17.10` base image to provide a full weight environment. It is available on DockerHub as:
+The Docker image is built on top of the `Ubuntu 18.10` base image to provide a full weight environment. It is available on DockerHub as:
 
-- [paulbouwer/k8s-cli-toolset:0.6](https://hub.docker.com/r/paulbouwer/k8s-cli-toolset/)
+- [paulbouwer/k8s-cli-toolset:0.7](https://hub.docker.com/r/paulbouwer/k8s-cli-toolset/)
 
 ### Run
 
@@ -85,12 +85,12 @@ Run the image as follows. Ensure that you mount your ~/.kube and ~/.helm folders
 
 Windows
 ```
-PS> docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.6
+PS> docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.7
 ```
 
 Linux/MacOS
 ```
-$ docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.6
+$ docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.7
 ```
 
 ### Build
@@ -99,10 +99,10 @@ If you'd like to build the image yourself, then you can do so as follows. The `b
 
 Powershell
 ```
-PS> docker build --no-cache --build-arg IMAGE_VERSION="0.6" --build-arg IMAGE_CREATE_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg IMAGE_SOURCE_REVISION="$(git rev-parse HEAD)" -f Dockerfile -t "k8s-cli-toolset:0.6" .
+PS> docker build --no-cache --build-arg IMAGE_VERSION="0.7" --build-arg IMAGE_CREATE_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg IMAGE_SOURCE_REVISION="$(git rev-parse HEAD)" -f Dockerfile -t "k8s-cli-toolset:0.7" .
 ```
 
 Bash
 ```
-$ docker build --no-cache --build-arg IMAGE_VERSION="0.6" --build-arg IMAGE_CREATE_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg IMAGE_SOURCE_REVISION="`git rev-parse HEAD`" -f Dockerfile -t "k8s-cli-toolset:0.6" .
+$ docker build --no-cache --build-arg IMAGE_VERSION="0.7" --build-arg IMAGE_CREATE_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg IMAGE_SOURCE_REVISION="`git rev-parse HEAD`" -f Dockerfile -t "k8s-cli-toolset:0.7" .
 ```
