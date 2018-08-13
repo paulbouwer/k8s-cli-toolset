@@ -3,11 +3,11 @@ FROM ubuntu:18.10
 ARG IMAGE_CREATE_DATE
 ARG IMAGE_VERSION
 ARG IMAGE_SOURCE_REVISION
-ARG KUBECTL_VERSION=1.10.5
-ARG KUBECTX_VERSION=0.5.0
-ARG ISTIO_VERSION=0.8.0
+ARG KUBECTL_VERSION=1.11.2
+ARG KUBECTX_VERSION=0.5.1
+ARG ISTIO_VERSION=1.0.0
 ARG HELM_VERSION=2.9.1
-ARG ARK_VERSION=0.8.2
+ARG ARK_VERSION=0.9.3
 ARG KUBE_PS1_VERSION=0.6.0 
 
 # Metadata as defined in OCI image spec annotations - https://github.com/opencontainers/image-spec/blob/master/annotations.md
@@ -103,7 +103,8 @@ RUN curl -L https://github.com/jonmosco/kube-ps1/archive/$KUBE_PS1_VERSION.tar.g
     && echo "source ~/k8s-prompt/k8s-cli-ps1.sh" >> ~/.bashrc \
     && echo "PROMPT_COMMAND=\"_kube_ps1_update_cache && k8s_cli_ps1\"" >> ~/.bashrc 
 
-RUN rm -fr /tmp/install-utils
+RUN rm -fr /tmp/install-utils \
+    && echo "alias k=kubectl" >> ~/.bashrc 
 
 WORKDIR /root
 CMD bash

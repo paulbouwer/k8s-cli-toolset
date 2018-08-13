@@ -2,11 +2,11 @@
 
 Provides the following [Kubernetes](https://kubernetes.io/) cli toolset:
 
-- kubectl **1.10.5** (with command completion)
-- kubectx/kubens **0.5.0** (with command completion)
-- istioctl **0.8.0** (with command completion)
+- kubectl **1.11.2** (with command completion)
+- kubectx/kubens **0.5.1** (with command completion)
+- istioctl **1.0.0** (with command completion)
 - helm **2.9.1** (with command completion)
-- ark **0.8.2**
+- ark **0.9.3**
 
 And the following utilities/tools:
 
