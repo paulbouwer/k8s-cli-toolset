@@ -104,7 +104,8 @@ RUN curl -L https://github.com/jonmosco/kube-ps1/archive/$KUBE_PS1_VERSION.tar.g
     && echo "PROMPT_COMMAND=\"_kube_ps1_update_cache && k8s_cli_ps1\"" >> ~/.bashrc 
 
 RUN rm -fr /tmp/install-utils \
-    && echo "alias k=kubectl" >> ~/.bashrc 
+    && echo "alias k=kubectl" >> ~/.bashrc \
+    && echo "complete -o default -F __start_kubectl k" >> ~/.bashrc
 
 WORKDIR /root
 CMD bash
