@@ -3,16 +3,15 @@ FROM ubuntu:18.10
 ARG IMAGE_CREATE_DATE
 ARG IMAGE_VERSION
 ARG IMAGE_SOURCE_REVISION
-ARG KUBECTL_VERSION=1.11.3
-ARG KUBECTX_VERSION=0.6.1
-ARG ISTIO_VERSION=1.0.3
-ARG HELM_VERSION=2.11.0
-ARG ARK_VERSION=0.9.10
-ARG KUBE_PS1_VERSION=0.6.0 
+ARG KUBECTL_VERSION=1.14.1
+ARG KUBECTX_VERSION=0.6.3
+ARG ISTIO_VERSION=1.1.3
+ARG HELM_VERSION=2.13.1
+ARG KUBE_PS1_VERSION=0.7.0 
 
 # Metadata as defined in OCI image spec annotations - https://github.com/opencontainers/image-spec/blob/master/annotations.md
 LABEL org.opencontainers.image.title="Kubernetes cli toolset" \
-      org.opencontainers.image.description="Provides the following Kubernetes cli toolset - kubectl $KUBECTL_VERSION, kubectx/kubens $KUBECTX_VERSION, istioctl $ISTIO_VERSION, helm $HELM_VERSION, and ark $ARK_VERSION. Leverages kube-ps1 $KUBE_PS1_VERSION to provide the current Kubernetes context and namespace on the bash prompt." \
+      org.opencontainers.image.description="Provides the following Kubernetes cli toolset - kubectl $KUBECTL_VERSION, kubectx/kubens $KUBECTX_VERSION, istioctl $ISTIO_VERSION, and helm $HELM_VERSION. Leverages kube-ps1 $KUBE_PS1_VERSION to provide the current Kubernetes context and namespace on the bash prompt." \
       org.opencontainers.image.created=$IMAGE_CREATE_DATE \
       org.opencontainers.image.version=$IMAGE_VERSION \
       org.opencontainers.image.authors="Paul Bouwer" \
@@ -84,17 +83,10 @@ RUN mkdir helm-$HELM_VERSION \
     && helm completion bash > ~/completions/helm.completion \
     && echo "source ~/completions/helm.completion" >> ~/.bashrc
 
-# Install ark
-# License: Apache-2.0
-RUN mkdir ark-$ARK_VERSION \
-    && curl -L https://github.com/heptio/ark/releases/download/v$ARK_VERSION/ark-v$ARK_VERSION-linux-amd64.tar.gz | tar xz \
-    && mv ark /usr/local/bin/ \
-    && chmod +x /usr/local/bin/ark
-
 # Install kube-ps1
 # License: Apache-2.0
 COPY k8s-cli-ps1.sh /root/k8s-prompt/
-RUN curl -L https://github.com/jonmosco/kube-ps1/archive/$KUBE_PS1_VERSION.tar.gz | tar xz \
+RUN curl -L https://github.com/jonmosco/kube-ps1/archive/v$KUBE_PS1_VERSION.tar.gz | tar xz \
     && cd ./kube-ps1-$KUBE_PS1_VERSION \
     && mv kube-ps1.sh ~/k8s-prompt/ \
     && chmod +x ~/k8s-prompt/*.sh \
