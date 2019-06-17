@@ -3,15 +3,16 @@ FROM ubuntu:18.10
 ARG IMAGE_CREATE_DATE
 ARG IMAGE_VERSION
 ARG IMAGE_SOURCE_REVISION
-ARG KUBECTL_VERSION=1.14.1
+ARG KUBECTL_VERSION=1.14.3
 ARG KUBECTX_VERSION=0.6.3
-ARG ISTIO_VERSION=1.1.3
-ARG HELM_VERSION=2.13.1
+ARG ISTIO_VERSION=1.1.8
+ARG LINKERD_VERSION=2.3.2
+ARG HELM_VERSION=2.14.1
 ARG KUBE_PS1_VERSION=0.7.0 
 
 # Metadata as defined in OCI image spec annotations - https://github.com/opencontainers/image-spec/blob/master/annotations.md
 LABEL org.opencontainers.image.title="Kubernetes cli toolset" \
-      org.opencontainers.image.description="Provides the following Kubernetes cli toolset - kubectl $KUBECTL_VERSION, kubectx/kubens $KUBECTX_VERSION, istioctl $ISTIO_VERSION, and helm $HELM_VERSION. Leverages kube-ps1 $KUBE_PS1_VERSION to provide the current Kubernetes context and namespace on the bash prompt." \
+      org.opencontainers.image.description="Provides the following Kubernetes cli toolset - kubectl $KUBECTL_VERSION, kubectx/kubens $KUBECTX_VERSION, istioctl $ISTIO_VERSION, linkerd $LINKERD_VERSION, and helm $HELM_VERSION. Leverages kube-ps1 $KUBE_PS1_VERSION to provide the current Kubernetes context and namespace on the bash prompt." \
       org.opencontainers.image.created=$IMAGE_CREATE_DATE \
       org.opencontainers.image.version=$IMAGE_VERSION \
       org.opencontainers.image.authors="Paul Bouwer" \
@@ -27,6 +28,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         bash-completion \
         ca-certificates \
         curl \
+        git \
         jq \
         less \
         vim \
@@ -58,6 +60,12 @@ RUN curl -L https://github.com/ahmetb/kubectx/archive/v$KUBECTX_VERSION.tar.gz |
     && echo "source ~/completions/kubens.completion" >> ~/.bashrc \
     && cd ../ \
     && rm -fr ./kubectx-$KUBECTX_VERSION
+
+# Install linkerd
+# License: Apache-2.0
+RUN curl -LO https://github.com/linkerd/linkerd2/releases/download/stable-$LINKERD_VERSION/linkerd2-cli-stable-$LINKERD_VERSION-linux \
+    && mv ./linkerd2-cli-stable-$LINKERD_VERSION-linux /usr/local/bin/linkerd \
+    && chmod +x /usr/local/bin/linkerd
 
 # Install istioctl
 # License: Apache-2.0
@@ -99,5 +107,5 @@ RUN rm -fr /tmp/install-utils \
     && echo "alias k=kubectl" >> ~/.bashrc \
     && echo "complete -o default -F __start_kubectl k" >> ~/.bashrc
 
-WORKDIR /root
+WORKDIR /workspace
 CMD bash

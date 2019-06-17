@@ -2,10 +2,11 @@
 
 Provides the following [Kubernetes](https://kubernetes.io/) cli toolset:
 
-- kubectl **1.14.1** (with command completion)
+- kubectl **1.14.3** (with command completion)
 - kubectx/kubens **0.6.3** (with command completion)
-- istioctl **1.1.3** (with command completion)
-- helm **2.13.1** (with command completion)
+- linkerd **2.3.2**
+- istioctl **1.1.8** (with command completion)
+- helm **2.14.1** (with command completion)
 
 And the following utilities/tools:
 
@@ -40,21 +41,21 @@ Kubernetes supports multiple virtual clusters backed by the same physical cluste
 
 > [kubens](https://github.com/ahmetb/kubectx) is a command line utility to make it easier to switch between Kubernetes namespaces.
 
+### linkerd
+
+[Linkerd](https://linkerd.io/2/overview/) is a service mesh for Kubernetes and other frameworks. It makes running services easier and safer by giving you runtime debugging, observability, reliability, and security—all without requiring any changes to your code.
+
+> The [linkerd](https://linkerd.io/2/reference/cli/) CLI is the primary way to interact with Linkerd. It can install the control plane to your cluster, add the proxy to your service and provide detailed metrics for how your service is performing.
+
 ### istioctl
 
 [Istio](https://istio.io) is an open platform that provides a uniform way to connect, manage, and secure microservices. Istio supports managing traffic flows between microservices, enforcing access policies, and aggregating telemetry data, all without requiring changes to the microservice code. Istio gives you:
 
-- Automatic load balancing for HTTP, gRPC, and TCP traffic.
-- Fine-grained control of traffic behavior with rich routing rules, retries, failovers, and fault injection.
-- A pluggable policy layer and configuration API supporting access controls, rate limits and quotas.
-- Automatic metrics, logs, and traces for all traffic within a cluster, including cluster ingress and egress.
-- Secure service-to-service authentication with strong identity assertions between services in a cluster.
-
-> [istioctl](https://istio.io/docs/reference/commands/istioctl.html) is a command line utility to create, list, modify, and delete configuration resources in the [Istio](https://istio.io/) system. 
+> [istioctl](https://istio.io/docs/reference/commands/istioctl.html) is a command line utility to create, list, modify, and delete configuration resources in the [Istio](https://istio.io/) system.
 
 ### helm
 
-[Helm](https://docs.helm.sh/) is the package manager for Kubernetes. It is a tool that streamlines installing and managing Kubernetes applications. Think of it like apt/yum/homebrew for Kubernetes. 
+[Helm](https://docs.helm.sh/) is the package manager for Kubernetes. It is a tool that streamlines installing and managing Kubernetes applications. Think of it like apt/yum/homebrew for Kubernetes.
 
 > [helm](https://github.com/kubernetes/helm) is a tool for managing Helm Charts. Helm Charts are packages of pre-configured Kubernetes resources. Only the helm client is installed. You will need to install the tiller component into your Kubernetes cluster using `helm init`.
 
@@ -66,7 +67,7 @@ Kubernetes supports multiple virtual clusters backed by the same physical cluste
 
 The Docker image is built on top of the `Ubuntu 18.10` base image to provide a full weight environment. It is available on DockerHub as:
 
-- [paulbouwer/k8s-cli-toolset:0.11](https://hub.docker.com/r/paulbouwer/k8s-cli-toolset/)
+- [paulbouwer/k8s-cli-toolset:0.12](https://hub.docker.com/r/paulbouwer/k8s-cli-toolset/)
 
 ### Run
 
@@ -74,12 +75,12 @@ Run the image as follows. Ensure that you mount your ~/.kube and ~/.helm folders
 
 Windows
 ```
-PS> docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.11
+PS> docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.12
 ```
 
 Linux/MacOS
 ```
-$ docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.11
+$ docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.12
 ```
 
 ### Build
@@ -88,10 +89,10 @@ If you'd like to build the image yourself, then you can do so as follows. The `b
 
 Powershell
 ```
-PS> docker build --no-cache --build-arg IMAGE_VERSION="0.11" --build-arg IMAGE_CREATE_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg IMAGE_SOURCE_REVISION="$(git rev-parse HEAD)" -f Dockerfile -t "k8s-cli-toolset:0.11" .
+PS> docker build --no-cache --build-arg IMAGE_VERSION="0.12" --build-arg IMAGE_CREATE_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg IMAGE_SOURCE_REVISION="$(git rev-parse HEAD)" -f Dockerfile -t "k8s-cli-toolset:0.12" .
 ```
 
 Bash
 ```
-$ docker build --no-cache --build-arg IMAGE_VERSION="0.11" --build-arg IMAGE_CREATE_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg IMAGE_SOURCE_REVISION="`git rev-parse HEAD`" -f Dockerfile -t "k8s-cli-toolset:0.11" .
+$ docker build --no-cache --build-arg IMAGE_VERSION="0.12" --build-arg IMAGE_CREATE_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg IMAGE_SOURCE_REVISION="`git rev-parse HEAD`" -f Dockerfile -t "k8s-cli-toolset:0.12" .
 ```
