@@ -3,11 +3,11 @@ FROM ubuntu:18.10
 ARG IMAGE_CREATE_DATE
 ARG IMAGE_VERSION
 ARG IMAGE_SOURCE_REVISION
-ARG KUBECTL_VERSION=1.14.3
-ARG KUBECTX_VERSION=0.6.3
-ARG ISTIO_VERSION=1.1.8
-ARG LINKERD_VERSION=2.3.2
-ARG HELM_VERSION=2.14.1
+ARG KUBECTL_VERSION=1.16.2
+ARG KUBECTX_VERSION=0.7.0
+ARG ISTIO_VERSION=1.3.3
+ARG LINKERD_VERSION=2.6.0
+ARG HELM_VERSION=2.15.0
 ARG KUBE_PS1_VERSION=0.7.0 
 
 # Metadata as defined in OCI image spec annotations - https://github.com/opencontainers/image-spec/blob/master/annotations.md
@@ -44,8 +44,8 @@ WORKDIR /tmp/install-utils
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl \
     && chmod +x ./kubectl \
     && mv ./kubectl /usr/local/bin/kubectl \
-    && kubectl completion bash > ~/completions/kubectl.completion \ 
-    && echo "source ~/completions/kubectl.completion" >> ~/.bashrc
+    && kubectl completion bash > ~/completions/kubectl.bash \ 
+    && echo "source ~/completions/kubectl.bash" >> ~/.bashrc
 
 # Install kubectx/kubens
 # License: Apache-2.0
@@ -54,10 +54,10 @@ RUN curl -L https://github.com/ahmetb/kubectx/archive/v$KUBECTX_VERSION.tar.gz |
     && mv kubectx kubens /usr/local/bin/ \
     && chmod +x /usr/local/bin/kubectx \
     && chmod +x /usr/local/bin/kubens \
-    && cat completion/kubectx.bash >> ~/completions/kubectx.completion \
-    && cat completion/kubens.bash >> ~/completions/kubens.completion \
-    && echo "source ~/completions/kubectx.completion" >> ~/.bashrc \
-    && echo "source ~/completions/kubens.completion" >> ~/.bashrc \
+    && cp completion/kubectx.bash ~/completions/ \
+    && cp completion/kubens.bash  ~/completions/ \
+    && echo "source ~/completions/kubectx.bash" >> ~/.bashrc \
+    && echo "source ~/completions/kubens.bash" >> ~/.bashrc \
     && cd ../ \
     && rm -fr ./kubectx-$KUBECTX_VERSION
 
@@ -65,7 +65,9 @@ RUN curl -L https://github.com/ahmetb/kubectx/archive/v$KUBECTX_VERSION.tar.gz |
 # License: Apache-2.0
 RUN curl -LO https://github.com/linkerd/linkerd2/releases/download/stable-$LINKERD_VERSION/linkerd2-cli-stable-$LINKERD_VERSION-linux \
     && mv ./linkerd2-cli-stable-$LINKERD_VERSION-linux /usr/local/bin/linkerd \
-    && chmod +x /usr/local/bin/linkerd
+    && chmod +x /usr/local/bin/linkerd \
+    && linkerd completion bash > ~/completions/linkerd.bash \
+    && echo "source ~/completions/linkerd.bash" >> ~/.bashrc
 
 # Install istioctl
 # License: Apache-2.0
@@ -76,8 +78,7 @@ RUN curl -L https://github.com/istio/istio/releases/download/$ISTIO_VERSION/isti
     && cd ../ \
     && rm -fr ./istio-$ISTIO_VERSION \
     && istioctl collateral --bash -o ~/completions \
-    && mv ~/completions/istioctl.bash ~/completions/istioctl.completion \
-    && echo "source ~/completions/istioctl.completion" >> ~/.bashrc
+    && echo "source ~/completions/istioctl.bash" >> ~/.bashrc
  
 # Install helm
 # License: Apache-2.0
@@ -88,8 +89,8 @@ RUN mkdir helm-$HELM_VERSION \
     && chmod +x /usr/local/bin/helm \
     && cd ../ \
     && rm -fr ./helm-$HELM_VERSION \
-    && helm completion bash > ~/completions/helm.completion \
-    && echo "source ~/completions/helm.completion" >> ~/.bashrc
+    && helm completion bash > ~/completions/helm.bash \
+    && echo "source ~/completions/helm.bash" >> ~/.bashrc
 
 # Install kube-ps1
 # License: Apache-2.0
