@@ -1,13 +1,13 @@
-FROM ubuntu:18.10
+FROM ubuntu:19.10
 
 ARG IMAGE_CREATE_DATE
 ARG IMAGE_VERSION
 ARG IMAGE_SOURCE_REVISION
-ARG KUBECTL_VERSION=1.16.2
-ARG KUBECTX_VERSION=0.7.0
-ARG ISTIO_VERSION=1.3.3
-ARG LINKERD_VERSION=2.6.0
-ARG HELM_VERSION=2.15.0
+ARG KUBECTL_VERSION=1.17.1
+ARG KUBECTX_VERSION=0.7.1
+ARG ISTIO_VERSION=1.4.3
+ARG LINKERD_VERSION=2.6.1
+ARG HELM_VERSION=3.0.2
 ARG KUBE_PS1_VERSION=0.7.0 
 
 # Metadata as defined in OCI image spec annotations - https://github.com/opencontainers/image-spec/blob/master/annotations.md
@@ -83,7 +83,7 @@ RUN curl -L https://github.com/istio/istio/releases/download/$ISTIO_VERSION/isti
 # Install helm
 # License: Apache-2.0
 RUN mkdir helm-$HELM_VERSION \
-    && curl -L https://storage.googleapis.com/kubernetes-helm/helm-v$HELM_VERSION-linux-amd64.tar.gz | tar xz -C helm-$HELM_VERSION --strip-components 1 \
+    && curl -L https://get.helm.sh/helm-v$HELM_VERSION-linux-amd64.tar.gz | tar xz -C helm-$HELM_VERSION --strip-components 1 \
     && cd ./helm-$HELM_VERSION \
     && mv helm /usr/local/bin/ \
     && chmod +x /usr/local/bin/helm \
