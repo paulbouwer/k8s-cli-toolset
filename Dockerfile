@@ -3,16 +3,18 @@ FROM ubuntu:19.10
 ARG IMAGE_CREATE_DATE
 ARG IMAGE_VERSION
 ARG IMAGE_SOURCE_REVISION
-ARG KUBECTL_VERSION=1.17.1
-ARG KUBECTX_VERSION=0.7.1
-ARG ISTIO_VERSION=1.4.3
-ARG LINKERD_VERSION=2.6.1
-ARG HELM_VERSION=3.0.2
-ARG KUBE_PS1_VERSION=0.7.0 
+ARG KUBECTL_VERSION=1.18.1
+ARG KUBIE_VERSION=0.8.3
+ARG ISTIO_VERSION=1.5.1
+ARG LINKERD_VERSION=2.7.1
+ARG HELM_VERSION=3.1.2
+ARG KUBE_PS1_VERSION=0.7.0
+
+ENV LANG C.UTF-8
 
 # Metadata as defined in OCI image spec annotations - https://github.com/opencontainers/image-spec/blob/master/annotations.md
 LABEL org.opencontainers.image.title="Kubernetes cli toolset" \
-      org.opencontainers.image.description="Provides the following Kubernetes cli toolset - kubectl $KUBECTL_VERSION, kubectx/kubens $KUBECTX_VERSION, istioctl $ISTIO_VERSION, linkerd $LINKERD_VERSION, and helm $HELM_VERSION. Leverages kube-ps1 $KUBE_PS1_VERSION to provide the current Kubernetes context and namespace on the bash prompt." \
+      org.opencontainers.image.description="Provides the following Kubernetes cli toolset - kubectl $KUBECTL_VERSION, kubie $KUBIE_VERSION, istioctl $ISTIO_VERSION, linkerd $LINKERD_VERSION, and helm $HELM_VERSION. Leverages kube-ps1 $KUBE_PS1_VERSION to provide the current Kubernetes context and namespace on the bash prompt." \
       org.opencontainers.image.created=$IMAGE_CREATE_DATE \
       org.opencontainers.image.version=$IMAGE_VERSION \
       org.opencontainers.image.authors="Paul Bouwer" \
@@ -28,6 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         bash-completion \
         ca-certificates \
         curl \
+        fzf \
         git \
         jq \
         less \
@@ -47,19 +50,14 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL
     && kubectl completion bash > ~/completions/kubectl.bash \ 
     && echo "source ~/completions/kubectl.bash" >> ~/.bashrc
 
-# Install kubectx/kubens
-# License: Apache-2.0
-RUN curl -L https://github.com/ahmetb/kubectx/archive/v$KUBECTX_VERSION.tar.gz | tar xz \
-    && cd ./kubectx-$KUBECTX_VERSION \
-    && mv kubectx kubens /usr/local/bin/ \
-    && chmod +x /usr/local/bin/kubectx \
-    && chmod +x /usr/local/bin/kubens \
-    && cp completion/kubectx.bash ~/completions/ \
-    && cp completion/kubens.bash  ~/completions/ \
-    && echo "source ~/completions/kubectx.bash" >> ~/.bashrc \
-    && echo "source ~/completions/kubens.bash" >> ~/.bashrc \
-    && cd ../ \
-    && rm -fr ./kubectx-$KUBECTX_VERSION
+# Install kubie
+# License: Zlib
+RUN curl -LO https://github.com/sbstp/kubie/releases/download/v$KUBIE_VERSION/kubie-linux-amd64 \
+    && chmod +x ./kubie-linux-amd64 \
+    && mv ./kubie-linux-amd64 /usr/local/bin/kubie \
+    && curl -LO https://raw.githubusercontent.com/sbstp/kubie/master/completion/kubie.bash \
+    && mv kubie.bash ~/completions/ \
+    && echo "source ~/completions/kubie.bash" >> ~/.bashrc
 
 # Install linkerd
 # License: Apache-2.0
