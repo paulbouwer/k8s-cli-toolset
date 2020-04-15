@@ -2,11 +2,11 @@
 
 Provides the following [Kubernetes](https://kubernetes.io/) cli toolset:
 
-- kubectl **1.17.1** (with command completion)
-- kubectx/kubens **0.7.1** (with command completion)
-- linkerd **stable-2.6.1** (with command completion)
-- istioctl **1.4.3** (with command completion)
-- helm **3.0.2** (with command completion)
+- kubectl **1.18.1** (with command completion)
+- kubie **0.8.3** (with command completion)
+- linkerd **stable-2.7.1** (with command completion)
+- istioctl **1.5.1** (with command completion)
+- helm **3.2.2** (with command completion)
 
 And the following utilities/tools:
 
@@ -16,9 +16,9 @@ And the following utilities/tools:
 - less
 - vim
 
-Leverages kube-ps1 **0.7.0** to provide the current Kubernetes context and namespace on the bash prompt.
+Leverages kube-ps1 **0.7.0** to provide the current Kubernetes context and namespace on the bash prompt. The bash prompt works well with the [Nerd Font patched Cascadia Code](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/CascadiaCode) font.
 
-![Alt text](k8s-cli-toolset.gif)
+![Alt text](k8s-cli-toolset.png)
 
 ## Toolset
 
@@ -32,15 +32,11 @@ Leverages kube-ps1 **0.7.0** to provide the current Kubernetes context and names
 
 > [kubectl](https://kubernetes.io/docs/user-guide/kubectl-overview/) is a command line utility for running [commands](https://kubernetes.io/docs/user-guide/kubectl/v1.7/) against Kubernetes clusters. kubectl is configured with [command completion](https://kubernetes.io/docs/tasks/tools/install-kubectl/#on-linux-using-bash).
 
-### kubectx/kubens
+### kubie
 
-A kubectl [context](https://kubernetes.io/docs/tasks/access-application-cluster/authenticate-across-clusters-kubeconfig/) defines a named **cluster**, **user**, **namespace** tuple which is used to send requests to the specified cluster using the provided authentication info and namespace. Each of the three is optional; it is valid to specify a context with only one of **cluster**, **user**, **namespace**, or to specify none. Unspecified values, or named values that don’t have corresponding entries in the loaded kubeconfig will be replaced with the default.
+[kubie](https://github.com/sbstp/kubie) is an alternative to **kubectx**, **kubens** and the **k on** prompt modification script. It offers context switching, namespace switching and prompt modification in a way that makes each shell independent from others. It also has support for split configuration files, meaning it can load Kubernetes contexts from multiple files. You can configure the paths where kubie will look for contexts.
 
-> [kubectx](https://github.com/ahmetb/kubectx) is a command line utility to make it easier to work with kubectl contexts when managing multiple Kubernetes clusters. 
-
-Kubernetes supports multiple virtual clusters backed by the same physical cluster. These virtual clusters are called [namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/).
-
-> [kubens](https://github.com/ahmetb/kubectx) is a command line utility to make it easier to switch between Kubernetes namespaces.
+A sample `kubie.yaml` file is included in this repo. Place this file in your `~/.kube` folder.
 
 ### linkerd
 
@@ -68,7 +64,7 @@ Kubernetes supports multiple virtual clusters backed by the same physical cluste
 
 The Docker image is built on top of the `Ubuntu 19.10` base image to provide a full weight environment. It is available on DockerHub as:
 
-- [paulbouwer/k8s-cli-toolset:0.14](https://hub.docker.com/r/paulbouwer/k8s-cli-toolset/)
+- [paulbouwer/k8s-cli-toolset:0.15](https://hub.docker.com/r/paulbouwer/k8s-cli-toolset/)
 
 ### Run
 
@@ -76,12 +72,12 @@ Run the image as follows. Ensure that you mount your ~/.kube and ~/.helm folders
 
 Windows
 ```
-PS> docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.14
+PS> docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.15
 ```
 
 Linux/MacOS
 ```
-$ docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.14
+$ docker run -it --rm -v ${HOME}/.kube:/root/.kube -v ${HOME}/.helm:/root/.helm paulbouwer/k8s-cli-toolset:0.15
 ```
 
 ### Build
@@ -90,10 +86,10 @@ If you'd like to build the image yourself, then you can do so as follows. The `b
 
 Powershell
 ```
-PS> docker build --no-cache --build-arg IMAGE_VERSION="0.14" --build-arg IMAGE_CREATE_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg IMAGE_SOURCE_REVISION="$(git rev-parse HEAD)" -f Dockerfile -t "k8s-cli-toolset:0.14" .
+PS> docker build --no-cache --build-arg IMAGE_VERSION="0.15" --build-arg IMAGE_CREATE_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg IMAGE_SOURCE_REVISION="$(git rev-parse HEAD)" -f Dockerfile -t "k8s-cli-toolset:0.15" .
 ```
 
 Bash
 ```
-$ docker build --no-cache --build-arg IMAGE_VERSION="0.14" --build-arg IMAGE_CREATE_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg IMAGE_SOURCE_REVISION="`git rev-parse HEAD`" -f Dockerfile -t "k8s-cli-toolset:0.14" .
+$ docker build --no-cache --build-arg IMAGE_VERSION="0.15" --build-arg IMAGE_CREATE_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg IMAGE_SOURCE_REVISION="`git rev-parse HEAD`" -f Dockerfile -t "k8s-cli-toolset:0.15" .
 ```
